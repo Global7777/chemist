@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Химики | Химия и безопасность</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gradient-1: linear-gradient(135deg, #0f4c5c 0%, #2e8b57 100%);
+            --gradient-2: linear-gradient(135deg, #c44536 0%, #e67e22 100%);
+            --gradient-3: linear-gradient(135deg, #1a659e 0%, #4a90e2 100%);
+            --bg: #e8f0f7;
+            --surface: rgba(255, 255, 255, 0.9);
+            --text-primary: #1a3b2e;
+            --text-secondary: #2d5a4b;
+            --text-tertiary: #4f7b6b;
+            --border: rgba(0, 80, 60, 0.15);
+            --shadow: 0 25px 50px -12px rgba(0, 80, 60, 0.3);
+            --blur: blur(20px);
+        }
+
+        .dark {
+            --bg: #0b2a22;
+            --surface: rgba(20, 50, 40, 0.8);
+            --text-primary: #e0f0e8;
+            --text-secondary: #b0d0c0;
+            --text-tertiary: #80a090;
+            --border: rgba(100, 200, 150, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(46, 139, 87, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(26, 101, 158, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Навбар */
+        .navbar {
+            background: var(--surface);
+            backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .nav-btn:hover {
+            background: rgba(46, 139, 87, 0.1);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            backdrop-filter: var(--blur);
+            margin-left: 16px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        /* Карточки */
+        .card {
+            background: var(--surface);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            margin: 30px 0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(46, 139, 87, 0.5);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        /* Сетки */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        /* Кнопки */
+        .btn-primary {
+            background: var(--gradient-1);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px -5px rgba(46, 139, 87, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 30px -5px rgba(46, 139, 87, 0.7);
+        }
+
+        /* Игровые элементы */
+        .question-box {
+            background: var(--surface);
+            border-radius: 40px;
+            padding: 40px;
+            margin: 30px 0;
+            border: 1px solid var(--border);
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: var(--text-primary);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .option-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--gradient-1);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .option-btn.correct:disabled {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .option-btn.wrong:disabled {
+            background: var(--gradient-2);
+            color: white;
+        }
+
+        /* Прогресс */
+        .progress-container {
+            margin: 40px 0;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--surface);
+            border-radius: 100px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 100px;
+            transition: width 0.3s ease;
+        }
+
+        /* Счетчик */
+        .score-badge {
+            background: var(--gradient-1);
+            padding: 8px 24px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Опасные вещества */
+        .danger-book {
+            background: linear-gradient(135deg, #8b0000 0%, #b22222 100%);
+            padding: 30px;
+            border-radius: 30px;
+            color: white;
+            margin: 30px 0;
+        }
+
+        .danger-book h3 {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .danger-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .danger-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            border-left: 5px solid #ffd700;
+        }
+
+        .danger-item i {
+            color: #ffd700;
+            margin-right: 10px;
+        }
+
+        /* Советы */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .tip-card {
+            background: var(--surface);
+            padding: 25px;
+            border-radius: 25px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .tip-card i {
+            font-size: 2.5rem;
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        /* Химики */
+        .chemist-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 30px;
+        }
+
+        .chemist-card h3 {
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Футер */
+        footer {
+            margin-top: 100px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-tertiary);
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .footer-name {
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.2rem;
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .tips-grid {
+                grid-template-columns: 1fr;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-flex">
+            <div class="logo">
+                ⚗️ Химик
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="nav-links">
+                    <button class="nav-btn" data-page="home"><i class="fas fa-home"></i> Главная</button>
+                    <button class="nav-btn" data-page="quiz"><i class="fas fa-flask"></i> Угадай вещество</button>
+                    <button class="nav-btn" data-page="test"><i class="fas fa-graduation-cap"></i> Тест 8-11</button>
+                    <button class="nav-btn" data-page="danger"><i class="fas fa-skull"></i> Опасные вещества</button>
+                    <button class="nav-btn" data-page="chemists"><i class="fas fa-microscope"></i> Химики</button>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container" id="mainContent"></main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-text">
+                <p>Разработано студентом "ТТИТ"</p>
+                <p class="footer-name">Лутфуллин Дмитрий Илдарович гр. 954</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            // Функция перемешивания массива (алгоритм Фишера-Йетса)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // Функция для создания вопроса с перемешанными ответами
+            function createShuffledQuestion(questionData) {
+                // Создаем массив объектов с ответами и флагом правильности
+                const answerObjects = questionData.options.map((text, index) => ({
+                    text: text,
+                    isCorrect: index === questionData.correct
+                }));
+                
+                // Перемешиваем
+                const shuffledAnswers = shuffleArray([...answerObjects]);
+                
+                // Находим новый индекс правильного ответа
+                const newCorrectIndex = shuffledAnswers.findIndex(a => a.isCorrect);
+                
+                // Возвращаем новый вопрос с перемешанными ответами
+                return {
+                    question: questionData.question,
+                    options: shuffledAnswers.map(a => a.text),
+                    correct: newCorrectIndex,
+                    topic: questionData.topic || null
+                };
+            }
+
+            // ============== ВОПРОСЫ ПО ХИМИИ ==============
+            const baseQuestions = [
+                { question: "Какой химический элемент обозначается символом 'O'?", options: ["Кислород", "Водород", "Золото", "Серебро"], correct: 0 },
+                { question: "Формула воды?", options: ["H₂O", "CO₂", "NaCl", "HCl"], correct: 0 },
+                { question: "Самый лёгкий газ?", options: ["Водород", "Гелий", "Кислород", "Азот"], correct: 0 },
+                { question: "Какой газ необходим для дыхания?", options: ["Кислород", "Углекислый газ", "Азот", "Водород"], correct: 0 },
+                { question: "Металл, который при н.у. жидкий?", options: ["Ртуть", "Свинец", "Железо", "Алюминий"], correct: 0 },
+                { question: "Формула поваренной соли?", options: ["NaCl", "KCl", "CaCl₂", "MgCl₂"], correct: 0 },
+                { question: "Какой газ выделяют растения на свету?", options: ["Кислород", "Углекислый газ", "Азот", "Водород"], correct: 0 },
+                { question: "Самый распространённый элемент во Вселенной?", options: ["Водород", "Гелий", "Кислород", "Углерод"], correct: 0 },
+                { question: "Какой элемент обозначается 'Fe'?", options: ["Железо", "Фтор", "Фосфор", "Франций"], correct: 0 },
+                { question: "Кислота, которую получают из лимонов?", options: ["Лимонная", "Уксусная", "Яблочная", "Аскорбиновая"], correct: 0 },
+                { question: "Что такое pH < 7?", options: ["Кислая среда", "Щелочная среда", "Нейтральная", "Основная"], correct: 0 },
+                { question: "Какой газ пахнет тухлыми яйцами?", options: ["Сероводород", "Хлор", "Аммиак", "Озон"], correct: 0 },
+                { question: "Формула метана?", options: ["CH₄", "C₂H₆", "C₃H₈", "C₄H₁₀"], correct: 0 },
+                { question: "Какой элемент входит в состав гемоглобина?", options: ["Железо", "Медь", "Цинк", "Магний"], correct: 0 },
+                { question: "Самый твёрдый минерал?", options: ["Алмаз", "Кварц", "Корунд", "Топаз"], correct: 0 },
+                { question: "Формула углекислого газа?", options: ["CO₂", "CO", "C₂O", "O₂C"], correct: 0 },
+                { question: "Какой элемент делает кости прочными?", options: ["Кальций", "Фосфор", "Магний", "Калий"], correct: 0 },
+                { question: "Какой газ используют для газировки?", options: ["Углекислый", "Кислород", "Азот", "Аргон"], correct: 0 },
+                { question: "Самый электроотрицательный элемент?", options: ["Фтор", "Хлор", "Кислород", "Азот"], correct: 0 },
+                { question: "Что такое H₂SO₄?", options: ["Серная кислота", "Соляная кислота", "Азотная кислота", "Угольная кислота"], correct: 0 },
+                { question: "Какой металл самый лёгкий?", options: ["Литий", "Натрий", "Калий", "Магний"], correct: 0 },
+                { question: "Формула аммиака?", options: ["NH₃", "N₂H₄", "HNO₃", "N₂O"], correct: 0 },
+                { question: "Какой элемент является основой органической химии?", options: ["Углерод", "Водород", "Кислород", "Азот"], correct: 0 },
+                { question: "Что такое NaOH?", options: ["Гидроксид натрия", "Поваренная соль", "Сода", "Поташ"], correct: 0 },
+                { question: "Какой газ имеет запах миндаля?", options: ["Циановодород", "Хлор", "Аммиак", "Сероводород"], correct: 0 }
+            ];
+
+            // Создаем финальный массив вопросов с перемешанными ответами
+            let questions = baseQuestions.map(q => createShuffledQuestion(q));
+
+            // Добавляем до 50
+            for (let i = questions.length; i < 50; i++) {
+                const newQuestion = {
+                    question: `Вопрос ${i+1}: Какое вещество имеет формулу NaCl?`,
+                    options: ["Поваренная соль", "Сахар", "Сода", "Мел"],
+                    correct: 0
+                };
+                questions.push(createShuffledQuestion(newQuestion));
+            }
+
+            // ============== ТЕСТЫ 30 ВОПРОСОВ ПО 3 ТЕМАМ ==============
+            const baseTests = [
+                // Неорганическая химия (10 вопросов)
+                { question: "Какой газ называют 'веселящим'?", options: ["N₂O", "CO₂", "O₂", "H₂"], correct: 0, topic: "Неорганическая химия" },
+                { question: "Какой металл самый активный?", options: ["Калий", "Натрий", "Литий", "Цезий"], correct: 3, topic: "Неорганическая химия" },
+                { question: "Что такое царская водка?", options: ["HCl + HNO₃", "H₂SO₄ + H₂O", "HCl + H₂O", "HNO₃ + H₂O"], correct: 0, topic: "Неорганическая химия" },
+                { question: "Какой элемент назван в честь России?", options: ["Рутений", "Родий", "Рений", "Радий"], correct: 0, topic: "Неорганическая химия" },
+                { question: "Что тяжелее: 1 моль воды или 1 моль спирта?", options: ["Вода", "Спирт", "Одинаково", "Зависит от давления"], correct: 0, topic: "Неорганическая химия" },
+                { question: "Какой газ используют в лампах накаливания?", options: ["Аргон", "Кислород", "Азот", "Водород"], correct: 0, topic: "Неорганическая химия" },
+                { question: "Формула питьевой соды?", options: ["NaHCO₃", "Na₂CO₃", "NaOH", "NaCl"], correct: 0, topic: "Неорганическая химия" },
+                { question: "Какой элемент пахнет фиалками при нагревании?", options: ["Иод", "Бром", "Хлор", "Фтор"], correct: 0, topic: "Неорганическая химия" },
+                { question: "Что образуется при горении водорода?", options: ["Вода", "Перекись", "Кислород", "Ничего"], correct: 0, topic: "Неорганическая химия" },
+                { question: "Какой металл плавится в руке?", options: ["Галлий", "Ртуть", "Свинец", "Олово"], correct: 0, topic: "Неорганическая химия" },
+                
+                // Органическая химия (10 вопросов)
+                { question: "Формула бензола?", options: ["C₆H₆", "C₆H₁₂", "C₆H₁₄", "C₆H₅"], correct: 0, topic: "Органическая химия" },
+                { question: "Самый простой спирт?", options: ["Метанол", "Этанол", "Пропанол", "Бутанол"], correct: 0, topic: "Органическая химия" },
+                { question: "Что такое уксусная кислота?", options: ["CH₃COOH", "HCOOH", "C₂H₅OH", "C₆H₁₂O₆"], correct: 0, topic: "Органическая химия" },
+                { question: "Какой газ выделяется при брожении?", options: ["CO₂", "O₂", "H₂", "CH₄"], correct: 0, topic: "Органическая химия" },
+                { question: "Что такое глюкоза?", options: ["C₆H₁₂O₆", "C₁₂H₂₂O₁₁", "C₆H₆", "CH₄"], correct: 0, topic: "Органическая химия" },
+                { question: "Какой полимер получают из нефти?", options: ["Полиэтилен", "Целлюлоза", "Крахмал", "Резина"], correct: 0, topic: "Органическая химия" },
+                { question: "Формула этилового спирта?", options: ["C₂H₅OH", "CH₃OH", "C₃H₇OH", "C₄H₉OH"], correct: 0, topic: "Органическая химия" },
+                { question: "Что такое формалин?", options: ["Раствор формальдегида", "Раствор спирта", "Раствор кислоты", "Раствор щёлочи"], correct: 0, topic: "Органическая химия" },
+                { question: "Какой газ образуется в болотах?", options: ["Метан", "Углекислый", "Кислород", "Азот"], correct: 0, topic: "Органическая химия" },
+                { question: "Что такое ацетон?", options: ["Кетон", "Спирт", "Кислота", "Альдегид"], correct: 0, topic: "Органическая химия" },
+                
+                // Химия вокруг нас (10 вопросов)
+                { question: "Что добавляют в зубную пасту для чистоты?", options: ["Фтор", "Хлор", "Бром", "Иод"], correct: 0, topic: "Химия вокруг нас" },
+                { question: "Какой газ используют для консервации вина?", options: ["Сероводород", "Кислород", "Углекислый", "Азот"], correct: 2, topic: "Химия вокруг нас" },
+                { question: "Что такое аскорбиновая кислота?", options: ["Витамин C", "Витамин A", "Витамин B", "Витамин D"], correct: 0, topic: "Химия вокруг нас" },
+                { question: "Какой металл входит в состав ламп?", options: ["Вольфрам", "Железо", "Медь", "Алюминий"], correct: 0, topic: "Химия вокруг нас" },
+                { question: "Что используют в батарейках?", options: ["Литий", "Натрий", "Калий", "Магний"], correct: 0, topic: "Химия вокруг нас" },
+                { question: "Какой газ вызывает помутнение известковой воды?", options: ["CO₂", "O₂", "H₂", "N₂"], correct: 0, topic: "Химия вокруг нас" },
+                { question: "Что такое перекись водорода?", options: ["H₂O₂", "H₂O", "HO₂", "H₂O₃"], correct: 0, topic: "Химия вокруг нас" },
+                { question: "Какой элемент нужен для щитовидной железы?", options: ["Иод", "Бром", "Фтор", "Хлор"], correct: 0, topic: "Химия вокруг нас" },
+                { question: "Что добавляют в бензин для детонации?", options: ["Свинец", "Железо", "Медь", "Цинк"], correct: 0, topic: "Химия вокруг нас" },
+                { question: "Какой газ используют для сварки?", options: ["Ацетилен", "Метан", "Пропан", "Бутан"], correct: 0, topic: "Химия вокруг нас" }
+            ];
+
+            // Перемешиваем ответы в тестах
+            let tests = baseTests.map(t => createShuffledQuestion(t));
+
+            // ============== ХИМИКИ, СВЯЗАННЫЕ С ТОМСКОЙ ОБЛАСТЬЮ ==============
+            const chemists = [
+                { name: "Дмитрий Иванович Менделеев", contribution: "Посещал Томск, инициировал создание первого сибирского университета, его имя носит ТПУ и институт", era: "XIX век" },
+                { name: "Николай Николаевич Зинин", contribution: "Уроженец Томской губернии, выдающийся химик-органик, академик", era: "XIX век" },
+                { name: "Владимир Васильевич Марковников", contribution: "Работал в Томске, исследовал сибирскую нефть, создатель томской химической школы", era: "XIX-XX" },
+                { name: "Николай Семёнович Курнаков", contribution: "Исследовал соляные озёра Сибири, основатель физико-химического анализа", era: "XX век" },
+                { name: "Алексей Евграфович Фаворский", contribution: "Работал в Томске, создатель школы химиков-органиков", era: "XX век" },
+                { name: "Григорий Осипович Зайцев", contribution: "Профессор Томского университета, исследователь сибирских минералов", era: "XIX-XX" }
+            ];
+
+            // ============== ОПАСНЫЕ ВЕЩЕСТВА ==============
+            const dangerousSubstances = [
+                { name: "Цианистый калий", formula: "KCN", danger: "Смертельная доза 0.1 г", effect: "Блокирует дыхательные ферменты" },
+                { name: "Ртуть", formula: "Hg", danger: "Пары ртути очень токсичны", effect: "Поражение нервной системы" },
+                { name: "Сероводород", formula: "H₂S", danger: "Высокотоксичен", effect: "Паралич обонятельного нерва" },
+                { name: "Угарный газ", formula: "CO", danger: "Не имеет запаха", effect: "Блокирует гемоглобин" },
+                { name: "Метанол", formula: "CH₃OH", danger: "Вызывает слепоту", effect: "Метаболизируется в формальдегид" },
+                { name: "Бензол", formula: "C₆H₆", danger: "Канцероген", effect: "Поражение костного мозга" }
+            ];
+
+            // ============== РЕКОМЕНДАЦИИ ПО БЕЗОПАСНОСТИ ==============
+            const safetyTips = [
+                { icon: "fa-flask", text: "Не нюхайте реактивы" },
+                { icon: "fa-droplet", text: "Мойте руки после опытов" },
+                { icon: "fa-fire", text: "Работайте в вытяжке" },
+                { icon: "fa-shield", text: "Используйте перчатки" }
+            ];
+
+            let globalScore = parseInt(localStorage.getItem('chem_score')) || 0;
+
+            function saveScore() {
+                localStorage.setItem('chem_score', globalScore);
+            }
+
+            function renderPage(page) {
+                const main = document.getElementById('mainContent');
+                
+                if (page === 'home') {
+                    main.innerHTML = `
+                        <div style="padding: 60px 0;">
+                            <h1>Техника безопасности работы<br>с химическими реагентами</h1>
+                            
+                            <div class="tips-grid">
+                                ${safetyTips.map(tip => `
+                                    <div class="tip-card">
+                                        <i class="fas ${tip.icon}"></i>
+                                        <p>${tip.text}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <div class="grid-2">
+                                <div class="card">
+                                    <i class="fas fa-flask" style="font-size: 2.5rem; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;"></i>
+                                    <h3>Угадай вещество</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 24px;">50 вопросов о химических элементах и соединениях</p>
+                                    <button class="btn-primary" onclick="document.querySelector('[data-page=\\'quiz\\']').click()">
+                                        Начать <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                                <div class="card">
+                                    <i class="fas fa-graduation-cap" style="font-size: 2.5rem; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;"></i>
+                                    <h3>Тест 8-11 класс</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 24px;">30 вопросов по неорганике, органике и химии в быту</p>
+                                    <button class="btn-primary" onclick="document.querySelector('[data-page=\\'test\\']').click()">
+                                        Пройти тест <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                else if (page === 'quiz') {
+                    let qIndex = 0;
+                    let qScore = 0;
+                    let answered = false;
+
+                    function buildQuiz() {
+                        if (qIndex >= questions.length) {
+                            globalScore += qScore;
+                            saveScore();
+                            main.innerHTML = `
+                                <div class="card" style="text-align: center; padding: 80px;">
+                                    <h2>Квиз завершён</h2>
+                                    <div style="font-size: 5rem; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 30px;">${qScore}/${questions.length}</div>
+                                    <button class="btn-primary" onclick="renderPage('quiz')">Пройти снова</button>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        const q = questions[qIndex];
+                        main.innerHTML = `
+                            <div class="card">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                                    <h2>Вопрос ${qIndex+1}</h2>
+                                    <div class="score-badge">
+                                        <i class="fas fa-star"></i> ${qScore}
+                                    </div>
+                                </div>
+
+                                <div class="question-text">${q.question}</div>
+                                <div class="options-grid">
+                                    ${q.options.map((opt, i) => `<button class="option-btn" data-opt="${i}">${opt}</button>`).join('')}
+                                </div>
+
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width:${(qIndex/questions.length)*100}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        document.querySelectorAll('.option-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                if (answered) return;
+                                const selected = parseInt(this.dataset.opt);
+                                const isCorrect = (selected === q.correct);
+                                
+                                if (isCorrect) { 
+                                    qScore++; 
+                                    globalScore++; 
+                                }
+                                answered = true;
+
+                                document.querySelectorAll('.option-btn').forEach((b, idx) => {
+                                    b.disabled = true;
+                                    if (idx === q.correct) b.classList.add('correct');
+                                    else if (idx === selected && !isCorrect) b.classList.add('wrong');
+                                });
+
+                                setTimeout(() => {
+                                    qIndex++;
+                                    answered = false;
+                                    buildQuiz();
+                                }, 600);
+                            });
+                        });
+                    }
+                    buildQuiz();
+                }
+
+                else if (page === 'test') {
+                    let tIndex = 0;
+                    let tScore = 0;
+                    let answered = false;
+
+                    function buildTest() {
+                        if (tIndex >= tests.length) {
+                            globalScore += tScore;
+                            saveScore();
+                            main.innerHTML = `
+                                <div class="card" style="text-align: center;">
+                                    <h2>Тест завершён</h2>
+                                    <div style="font-size: 4rem; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 30px;">${tScore}/${tests.length}</div>
+                                    <button class="btn-primary" onclick="renderPage('test')">Пройти снова</button>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        const q = tests[tIndex];
+                        main.innerHTML = `
+                            <div class="card">
+                                <div style="margin-bottom: 20px;">
+                                    <span class="score-badge" style="background: var(--gradient-3);">${q.topic}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+                                    <h2>Вопрос ${tIndex+1}</h2>
+                                    <div class="score-badge">
+                                        <i class="fas fa-star"></i> ${tScore}
+                                    </div>
+                                </div>
+                                <div class="question-text">${q.question}</div>
+                                <div class="options-grid">
+                                    ${q.options.map((opt, i) => `<button class="option-btn" data-opt="${i}">${opt}</button>`).join('')}
+                                </div>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width:${(tIndex/tests.length)*100}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        document.querySelectorAll('.option-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                if (answered) return;
+                                const selected = parseInt(this.dataset.opt);
+                                const isCorrect = (selected === q.correct);
+                                
+                                if (isCorrect) { 
+                                    tScore++; 
+                                    globalScore++; 
+                                }
+                                answered = true;
+
+                                document.querySelectorAll('.option-btn').forEach((b, idx) => {
+                                    b.disabled = true;
+                                    if (idx === q.correct) b.classList.add('correct');
+                                    else if (idx === selected && !isCorrect) b.classList.add('wrong');
+                                });
+
+                                setTimeout(() => {
+                                    tIndex++;
+                                    answered = false;
+                                    buildTest();
+                                }, 600);
+                            });
+                        });
+                    }
+                    buildTest();
+                }
+
+                else if (page === 'danger') {
+                    main.innerHTML = `
+                        <div class="card">
+                            <h2>⚠️ Опасные вещества</h2>
+                            <p style="font-size: 1.2rem; margin-bottom: 30px;">Красная книга химии: вещества, требующие особой осторожности.</p>
+                            
+                            <div class="danger-book">
+                                <h3><i class="fas fa-skull-crossbones"></i> Токсичные соединения</h3>
+                                <div class="danger-list">
+                                    ${dangerousSubstances.map(sub => `
+                                        <div class="danger-item">
+                                            <i class="fas fa-flask"></i>
+                                            <strong>${sub.name} (${sub.formula})</strong><br>
+                                            <small>${sub.danger} • ${sub.effect}</small>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 40px;">
+                                <h3>Правила безопасности в лаборатории</h3>
+                                <ul style="list-style: none; margin-top: 20px;">
+                                    <li style="margin: 15px 0;"><i class="fas fa-check-circle" style="color: var(--gradient-1); margin-right: 10px;"></i>Всегда работайте в перчатках и очках</li>
+                                    <li style="margin: 15px 0;"><i class="fas fa-check-circle" style="color: var(--gradient-1); margin-right: 10px;"></i>Не пробуйте реактивы на вкус</li>
+                                    <li style="margin: 15px 0;"><i class="fas fa-check-circle" style="color: var(--gradient-1); margin-right: 10px;"></i>Используйте вытяжной шкаф для летучих веществ</li>
+                                    <li style="margin: 15px 0;"><i class="fas fa-check-circle" style="color: var(--gradient-1); margin-right: 10px;"></i>Знайте, где находится аптечка</li>
+                                </ul>
+                            </div>
+
+                            <div style="margin-top: 40px; text-align: center;">
+                                <a href="https://yandex.ru/video/preview/5899200144867374956" target="_blank" class="btn-primary" style="text-decoration: none;">
+                                    <i class="fas fa-external-link-alt"></i> Техника безопасности (видео)
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                else if (page === 'chemists') {
+                    main.innerHTML = `
+                        <div class="card">
+                            <h2>Химики, связанные с Томском</h2>
+                            <div class="grid-3">
+                                ${chemists.map(c => `
+                                    <div class="chemist-card">
+                                        <h3>${c.name}</h3>
+                                        <p style="color: var(--text-secondary); margin: 15px 0;">${c.contribution}</p>
+                                        <div style="color: var(--text-tertiary);">${c.era}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Навигация
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    renderPage(e.currentTarget.dataset.page);
+                });
+            });
+
+            // Тема
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                themeToggle.innerHTML = document.body.classList.contains('dark') 
+                    ? '<i class="fas fa-sun"></i>' 
+                    : '<i class="fas fa-moon"></i>';
+            });
+
+            // Старт
+            renderPage('home');
+        })();
+    </script>
+</body>
+</html>
